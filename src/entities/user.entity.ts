@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Entity,
   Column,
@@ -11,6 +12,8 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  // @Exclude() - so that the password should be excluded from network response
+  @Exclude()
   @Column()
   password: string;
 
