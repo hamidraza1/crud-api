@@ -5,8 +5,13 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  Unique,
+  OneToOne,
+  OneToMany,
+  AfterInsert,
+  AfterUpdate,
+  AfterRemove,
 } from 'typeorm';
+import { Report } from './report.entity';
 
 @Entity()
 export class User {
@@ -14,11 +19,13 @@ export class User {
   id: number;
 
   // @Exclude() - so that the password should be excluded from network response
+  // instanceToPlain function is used to in service to refine the response accordingly
+  // the other way to mutate the response is using interceptor e.g SerializeInterceptor
   @Exclude()
   @Column()
   password: string;
 
-  @Column({ unique: true })
+  @Column()
   email: string;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
@@ -28,4 +35,23 @@ export class User {
   updatedAt?: Date;
 
   // ... add other columns and decorators as needed
+
+  //Hooks => these are used for logging/debugging purpose
+  @AfterInsert()
+  logInsert() {
+    console.log('Inserted User with id:', this.id);
+  }
+
+  @AfterUpdate()
+  logUpdate() {
+    console.log('Updated User with id:', this.id);
+  }
+
+  @AfterRemove()
+  logRemove() {
+    console.log('Removed User with id:', this.id);
+  }
+
+  @OneToMany(() => Report, (report) => report.user)
+  reports: Report[];
 }

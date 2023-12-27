@@ -3,7 +3,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import * as dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config({ path: '.env.development' }); //if filename is simply .env then we dont need to pass anything as argument
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
